@@ -1,0 +1,26 @@
+# Credenciais OAuth — não commitar em repo público
+credentials.json
+client_secret_*.json
+token*.json
+
+# PyInstaller
+dist/
+build/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Downloads de teste
+saida/
+Downloads/
+
+# Configs locais
+.env
+
+# Claude Code (nao versionar)
+.claude/
+CLAUDE.md
+CLAUDE.local.md
