@@ -247,7 +247,7 @@ class App(ctk.CTk):
             (self.st_destino, "Conta de destino",
              "Só para enviar. Pode ser a mesma ou outra conta. Sem link de pasta de destino, "
              "a cópia vai para a raiz do Meu Drive e o app pede só a permissão mínima. Com link, "
-             "pede acesso ao Drive dessa conta. O login é feito na aba Enviar.", None, None),
+             "pede acesso ao Drive dessa conta.", "Entrar / trocar", self._entrar_destino),
         ]
         for i, (status, titulo, desc, rotulo, cmd) in enumerate(linhas, start=1):
             if status is not None:
@@ -580,13 +580,14 @@ class App(ctk.CTk):
     def _entrar_origem(self):
         def alvo(ctx):
             api = core.autenticar(core.caminho_token("origem"), core.SCOPE_LEITURA,
-                                  core.caminho_credenciais(), ctx)
+                                  core.caminho_credenciais(), ctx, forcar=True)
             return api, api.usuario()
 
         def depois(res):
             self.api_origem = res[0]
             self._status_conta(self.st_origem, res[1])
             self._escrever_log("Baixar", "Conta de origem conectada: " + res[1])
+            messagebox.showinfo("Drive Clone", "Conta de origem conectada: " + res[1])
         self._tarefa("Baixar", alvo, depois)
 
     def _escopo_destino(self):
@@ -597,7 +598,7 @@ class App(ctk.CTk):
 
         def alvo(ctx):
             api = core.autenticar(core.caminho_token("destino"), escopo,
-                                  core.caminho_credenciais(), ctx)
+                                  core.caminho_credenciais(), ctx, forcar=True)
             return api, api.usuario()
 
         def depois(res):
@@ -605,6 +606,7 @@ class App(ctk.CTk):
             self._status_conta(self.st_destino, res[1])
             self.l_conta_dest.configure(text="Conta de destino: " + res[1])
             self._escrever_log("Enviar", "Conta de destino conectada: " + res[1])
+            messagebox.showinfo("Drive Clone", "Conta de destino conectada: " + res[1])
         self._tarefa("Enviar", alvo, depois)
 
     # ---------- baixar ----------

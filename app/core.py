@@ -388,12 +388,13 @@ class DriveAPI:
         return resp["id"]
 
 
-def autenticar(token, escopo, credenciais, ctx=None, interativo=True):
-    """Devolve um DriveAPI. Abre o navegador na primeira vez (ou quando o escopo muda)."""
+def autenticar(token, escopo, credenciais, ctx=None, interativo=True, forcar=False):
+    """Devolve um DriveAPI. Abre o navegador na primeira vez, quando o escopo muda
+    ou quando forcar=True (para trocar de conta)."""
     log = ctx.log if ctx else print
     token = Path(token)
     creds = None
-    if token.exists():
+    if token.exists() and not forcar:
         try:
             creds = Credentials.from_authorized_user_file(str(token))
         except Exception:
